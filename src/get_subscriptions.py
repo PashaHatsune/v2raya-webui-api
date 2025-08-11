@@ -1,9 +1,11 @@
+import uuid
 import requests
-import uuid 
-from src.login import get_token
-from config import config
-from src.utils import json_data
 from loguru import logger 
+
+from config import config
+from src.login import get_token
+from src.utils import json_data
+
 
 def get_subscriptions() -> list[dict]:
 

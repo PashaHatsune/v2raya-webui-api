@@ -1,5 +1,6 @@
 import uuid
 import requests
+
 from loguru import logger
 
 from config import config
