@@ -95,7 +95,7 @@ def ping_all_servers(servers: list[dict] | None = None) -> list[tuple[dict, dict
 
             with open("good_servers.json", "w", encoding="utf-8") as f:
                 json.dump(good_servers, f, indent=4, ensure_ascii=False)
-            logger.info(f"Сохранили {len(good_servers)} валидных серверов в good_servers.json")
+            logger.info(f"Сохранил {len(good_servers)} валидных серверов в good_servers.json")
         else:
             logger.error(f"Ошибка в ответе на пинг: {data.get('message', 'без сообщения')}")
 
