@@ -19,7 +19,6 @@ def get_token() -> str:
     
     try:
         data = resp.json()
-        logger.debug(f"Ответ JSON: {data}")
     except Exception as e:
         logger.error(f"Ошибка парсинга JSON из ответа: {e}")
         raise
