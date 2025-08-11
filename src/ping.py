@@ -3,11 +3,10 @@ import urllib.parse
 import uuid
 import json
 from config import config
-from src.utils import HEADERS
-
 from src.get_subscriptions import get_subscriptions
-
+from src.login import get_token
 from loguru import logger
+
 
 def ping_server(server) -> dict:
     whiches = [{
@@ -16,22 +15,38 @@ def ping_server(server) -> dict:
         "sub": server.get("sub_index", 0)
     }]
     param = urllib.parse.quote(json.dumps(whiches))
-    url = f"{config.api_url}/api/httpLatency?whiches={param}"
+    url = f"http://{config.api_url}/api/httpLatency?whiches={param}"
 
-    headers = HEADERS.copy()
-    headers["X-V2raya-Request-Id"] = str(uuid.uuid4())
+    headers = {
+        "Authorization": get_token(),
+        "Content-Type": "application/json",
+        "X-V2raya-Request-Id": str(uuid.uuid4()),
+        "User-Agent": "Mozilla/5.0",
+        "Accept": "application/json, text/plain, */*",
+        "Origin": f"http://{config.api_url}",
+        "Referer": f"http://{config.api_url}",
+        "Connection": "keep-alive"
+    }
 
-    resp = requests.get(url, headers=headers)
-    resp.raise_for_status()
-    data = resp.json()
-    logger.info(f"Пингуем {server['name']}, CODE: {data['code']} | ID: {data['data']['whiches'][0]['id']} | MS: {data['data']['whiches'][0]['pingLatency']}")
-    return data
+    try:
+        resp = requests.get(url, headers=headers)
+        resp.raise_for_status()
+        data = resp.json()
+        logger.info(
+            f"Пингуем {server['name']}, CODE: {data['code']} | "
+            f"ID: {data['data']['whiches'][0]['id']} | "
+            f"MS: {data['data']['whiches'][0]['pingLatency']}"
+        )
+        return data
+    except Exception as e:
+        logger.error(f"Ошибка при пинге сервера {server['name']}: {e}")
+        return {}
 
-def ping_all_servers(servers=None) -> dict:
+
+def ping_all_servers(servers: list[dict] | None = None) -> list[tuple[dict, dict]]:
     if not servers:
         servers = get_subscriptions()
 
-    # Формируем список объектов для запроса
     whiches = [{
         "id": srv["id"],
         "_type": srv["_type"],
@@ -39,15 +54,24 @@ def ping_all_servers(servers=None) -> dict:
     } for srv in servers]
 
     param = urllib.parse.quote(json.dumps(whiches))
-    url = f"{config.api_url}/api/httpLatency?whiches={param}"
-
-    headers = HEADERS.copy()
-    headers["X-V2raya-Request-Id"] = str(uuid.uuid4())
+    
 
     try:
-        resp = requests.get(url, headers=headers)
-        resp.raise_for_status()
-        data = resp.json()
+        response = requests.get(
+            url=f"http://{config.api_url}/api/httpLatency?whiches={param}",
+            headers={
+                "Authorization": get_token(),
+                "Content-Type": "application/json",
+                "X-V2raya-Request-Id": str(uuid.uuid4()),
+                "User-Agent": "Mozilla/5.0",
+                "Accept": "application/json, text/plain, */*",
+                "Origin": f"http://{config.api_url}",
+                "Referer": f"http://{config.api_url}",
+                "Connection": "keep-alive"
+            }
+        )
+        response.raise_for_status()
+        data = response.json()
 
         results = []
         good_servers = []
@@ -68,7 +92,7 @@ def ping_all_servers(servers=None) -> dict:
                                 "id": srv["id"],
                                 "latency_ms": latency
                             })
-            # Запись валидных серверов
+
             with open("good_servers.json", "w", encoding="utf-8") as f:
                 json.dump(good_servers, f, indent=4, ensure_ascii=False)
             logger.info(f"Сохранили {len(good_servers)} валидных серверов в good_servers.json")
@@ -80,4 +104,3 @@ def ping_all_servers(servers=None) -> dict:
     except Exception as e:
         logger.error(f"Ошибка пинга серверов: {e}")
         return []
-

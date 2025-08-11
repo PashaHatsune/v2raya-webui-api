@@ -1,14 +1,26 @@
 import requests
-
+import uuid 
+from src.login import get_token
 from config import config
-from src.utils import HEADERS, json_data
+from src.utils import json_data
 from loguru import logger 
 
 def get_subscriptions() -> list[dict]:
-    url = f"{config.api_url}/api/subscription"
-    headers = HEADERS.copy()
 
-    response = requests.put(url, headers=headers, json=json_data)
+    response = requests.put(
+        url=f"http://{config.api_url}/api/subscription",
+        headers={
+            "Authorization": get_token(),
+            "Content-Type": "application/json",
+            "X-V2raya-Request-Id": str(uuid.uuid4()),
+            "User-Agent": "Mozilla/5.0",
+            "Accept": "application/json, text/plain, */*",
+            "Origin": f"http://{config.api_url}",
+            "Referer": f"http://{config.api_url}",
+            "Connection": "keep-alive"
+        },
+        json=json_data
+    )
     try:
         response.raise_for_status()
     except Exception as e:

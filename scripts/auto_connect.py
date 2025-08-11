@@ -13,7 +13,7 @@ def get_fastest_server():
         logger.warning("Нет серверов для пинга")
         return None
 
-    data = ping_all_servers(servers)  # Пинг всех разом
+    data = ping_all_servers(servers)
 
     good_servers = []
     for srv, which in data:  # resp заменяем на which — это пинг по одному серверу

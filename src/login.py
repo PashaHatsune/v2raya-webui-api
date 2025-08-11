@@ -4,7 +4,7 @@ from config import config
 
 
 def get_token() -> str:
-    resp = requests.post(f"{config.api_url}/api/login", json={
+    resp = requests.post(f"http://{config.api_url}/api/login", json={
         "username": config.login.get_secret_value(),
         "password": config.password.get_secret_value()
     })
