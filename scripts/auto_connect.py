@@ -38,7 +38,6 @@ if __name__ == "__main__":
     if fastest:
         logger.info(f"ID самого быстрого сервера: {fastest['id']}, задержка: {fastest['latency_ms']}ms")
         try:
-            print(fastest['id'])
             connect_server(int(fastest['id']))
             logger.success("Подключили вас к серверу")
         except Exception as e:
