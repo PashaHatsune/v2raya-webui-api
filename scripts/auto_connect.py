@@ -34,16 +34,16 @@ def get_fastest_server():
     return fastest
 
 
-if __name__ == "__main__":
-    fastest = get_fastest_server()
-    if fastest:
-        logger.info(f"ID самого быстрого сервера: {fastest['id']}, задержка: {fastest['latency_ms']}ms")
-        try:
-            connect_server(int(fastest['id']))
-            logger.success("Подключили вас к серверу")
-        except Exception as e:
-            logger.error(f"Ошибка при подключении к серверу {fastest['id']}: {e}")
-    else:
-        logger.warning(f"Нет подходящих серверов с latency < {maximal_ping}ms")
+# if __name__ == "__main__":
+#     fastest = get_fastest_server()
+#     if fastest:
+#         logger.info(f"ID самого быстрого сервера: {fastest['id']}, задержка: {fastest['latency_ms']}ms")
+#         try:
+#             connect_server(int(fastest['id']))
+#             logger.success("Подключили вас к серверу")
+#         except Exception as e:
+#             logger.error(f"Ошибка при подключении к серверу {fastest['id']}: {e}")
+#     else:
+#         logger.warning(f"Нет подходящих серверов с latency < {maximal_ping}ms")
 
 
