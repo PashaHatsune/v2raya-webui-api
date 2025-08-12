@@ -5,9 +5,9 @@ import uuid
 import requests
 from loguru import logger
 
-from config import config
-from src.login import get_token
-from src.ping import ping_server
+from ..config import config
+from ..src.login import get_token
+from ..src.ping import ping_server
 
 
 def get_touch_data():
