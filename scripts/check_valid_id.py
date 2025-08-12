@@ -1,8 +1,13 @@
+import json
+import urllib
+import uuid
+
 import requests
 from loguru import logger
 
 from config import config
 from src.login import get_token
+from src.ping import ping_server
 
 
 def get_touch_data():
@@ -18,7 +23,7 @@ def get_touch_data():
                 "Accept-Encoding": "gzip, deflate",
                 "Referer": f"http://{config.api_url}",
                 "Authorization": get_token(),
-                "X-V2raya-Request-Id": "static-or-dynamic-id-if-needed",
+                "X-V2raya-Request-Id": f"{uuid.uuid4()}",
                 "Origin": f"http://{config.api_url}",
                 "Sec-GPC": "1",
                 "Connection": "keep-alive",
@@ -60,11 +65,16 @@ def get_all_servers(touch_data):
     return servers
 
 
+
 def check_server_valid(server_id, servers):
     for srv in servers:
         if srv.get("id") == server_id:
-            logger.success(f"Сервер с ID {server_id} валиден и найден: {srv.get('name', 'без имени')}")
-            return True
+            if ping_server(srv):
+                logger.success(f"Сервер с ID {server_id} валиден и отвечает: {srv.get('name')}")
+                return True
+            else:
+                logger.warning(f"Сервер с ID {server_id} найден, но не отвечает: {srv.get('name')}")
+                return False
 
     logger.warning(f"Сервер с ID {server_id} НЕ найден среди подписок")
     return False

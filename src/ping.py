@@ -10,7 +10,7 @@ from src.get_subscriptions import get_subscriptions
 from src.login import get_token
 
 
-def ping_server(server) -> dict:
+def ping_server(server) -> bool:
     whiches = [{
         "id": server["id"],
         "_type": server["_type"],
@@ -31,18 +31,24 @@ def ping_server(server) -> dict:
     }
 
     try:
-        resp = requests.get(url, headers=headers)
+        resp = requests.get(url, headers=headers, timeout=5)
         resp.raise_for_status()
         data = resp.json()
-        logger.info(
-            f"Пингуем {server['name']}, CODE: {data['code']} | "
-            f"ID: {data['data']['whiches'][0]['id']} | "
-            f"MS: {data['data']['whiches'][0]['pingLatency']}"
-        )
-        return data
+        if data.get("code") != "SUCCESS":
+            logger.error(f"Ошибка пинга: {data}")
+            return False
+
+        ping_latency = data["data"]["whiches"][0].get("pingLatency", "")
+        if ping_latency and ping_latency.replace("ms", "").strip().isdigit():
+            latency_ms = int(ping_latency.replace("ms", "").strip())
+            logger.info(f"Ping сервера {server['name']} = {latency_ms} ms")
+            return latency_ms < 400  # валид, если пинг меньше 400
+        else:
+            logger.warning(f"Сервер {server['name']} не отвечает на пинг")
+            return False
     except Exception as e:
         logger.error(f"Ошибка при пинге сервера {server['name']}: {e}")
-        return {}
+        return False
 
 
 def ping_all_servers(servers: list[dict] | None = None) -> list[tuple[dict, dict]]:
