@@ -1,6 +1,7 @@
 import uuid
+
 import requests
-from loguru import logger 
+from loguru import logger
 
 from config import config
 from src.login import get_token

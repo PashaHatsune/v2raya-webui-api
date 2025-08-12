@@ -1,8 +1,8 @@
-from src.ping import ping_all_servers
-from src.get_subscriptions import get_subscriptions
 from loguru import logger
 
 from src.connection import connect_server
+from src.get_subscriptions import get_subscriptions
+from src.ping import ping_all_servers
 
 maximal_ping = 700
 good_servers = []

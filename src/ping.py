@@ -1,11 +1,13 @@
-import requests
+import json
 import urllib.parse
 import uuid
-import json
+
+import requests
+from loguru import logger
+
 from config import config
 from src.get_subscriptions import get_subscriptions
 from src.login import get_token
-from loguru import logger
 
 
 def ping_server(server) -> dict:

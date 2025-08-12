@@ -1,9 +1,11 @@
 import argparse
+
+from loguru import logger
+
 from src.connection import connect_server, off_v2raya, on_v2raya
 from src.get_subscriptions import get_subscriptions
 from src.ping import ping_all_servers
 
-from loguru import logger
 
 def main():
     parser = argparse.ArgumentParser(description="V2ray automation CLI")

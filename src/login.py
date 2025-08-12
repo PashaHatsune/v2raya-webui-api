@@ -1,6 +1,8 @@
 import requests
 from loguru import logger
+
 from config import config
+
 
 def get_token() -> str:
     url = f"http://{config.api_url}/api/login"

@@ -1,9 +1,8 @@
 import requests
 from loguru import logger
-from config import config  # если надо взять API_URL из конфига
 
-
-
+from config import config
+from src.login import get_token
 
 
 def get_touch_data():
@@ -12,15 +11,15 @@ def get_touch_data():
         resp = requests.get(
             url=f"http://{config.api_url}/api/touch",
             headers={
-                "Host": "192.168.1.1:2019",
+                "Host": f"{config.api_url}",
                 "User-Agent": "Mozilla/5.0 (X11; Linux x86_64; rv:141.0) Gecko/20100101 Firefox/141.0",
                 "Accept": "application/json, text/plain, */*",
                 "Accept-Language": "ru-RU,ru;q=0.8,en-US;q=0.5,en;q=0.3",
                 "Accept-Encoding": "gzip, deflate",
-                "Referer": "http://192.168.1.1:2019/",
-                "Authorization": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTc1MjUwMzQsInVuYW1lIjoibWlrdSJ9.MWhqbSbQ4CdOrhrpifSYfDWaND0yJ4yjhRpIjNIGj8A",
+                "Referer": f"http://{config.api_url}",
+                "Authorization": get_token(),
                 "X-V2raya-Request-Id": "static-or-dynamic-id-if-needed",
-                "Origin": "http://192.168.1.1:2019",
+                "Origin": f"http://{config.api_url}",
                 "Sec-GPC": "1",
                 "Connection": "keep-alive",
                 "Priority": "u=0"
