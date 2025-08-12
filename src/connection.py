@@ -1,10 +1,9 @@
 import uuid
 
 import requests
+from ..config import config
 from loguru import logger
-
-from config import config
-from src.login import get_token
+from .login import get_token
 
 
 def connect_server(server_id, sub_index=0, outbound="proxy"):
@@ -69,7 +68,7 @@ def off_v2raya():
     }
     logger.debug("Отправка запроса выключения v2raya")
     try:
-        response = requests.post(url, headers=headers, data=b"")
+        response = requests.delete(url, headers=headers, data=b"")
         response.raise_for_status()
         try:
             data = response.json()

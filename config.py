@@ -1,6 +1,6 @@
 from pydantic import SecretStr
 from pydantic_settings import BaseSettings, SettingsConfigDict
-
+from pathlib import Path
 
 class Settings(BaseSettings):
     api_url: str
@@ -8,7 +8,7 @@ class Settings(BaseSettings):
     password: SecretStr
 
     model_config = SettingsConfigDict(
-        env_file=".env",
+        env_file=Path(__file__).parent / ".env",
         env_file_encoding="utf-8" 
     )
 

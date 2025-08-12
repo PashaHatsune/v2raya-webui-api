@@ -3,11 +3,10 @@ import urllib.parse
 import uuid
 
 import requests
+from ..config import config
 from loguru import logger
-
-from config import config
-from src.get_subscriptions import get_subscriptions
-from src.login import get_token
+from .get_subscriptions import get_subscriptions
+from .login import get_token
 
 
 def ping_server(server) -> bool:

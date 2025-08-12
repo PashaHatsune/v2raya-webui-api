@@ -3,9 +3,8 @@ import urllib
 import uuid
 
 import requests
-from loguru import logger
-
 from config import config
+from loguru import logger
 from src.login import get_token
 from src.ping import ping_server
 
