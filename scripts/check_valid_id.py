@@ -8,7 +8,7 @@ from src.login import get_token
 def get_touch_data():
     try:
         logger.debug(f"Отправляем GET запрос на /api/touch")
-        resp = requests.get(
+        response = requests.get(
             url=f"http://{config.api_url}/api/touch",
             headers={
                 "Host": f"{config.api_url}",
@@ -27,8 +27,8 @@ def get_touch_data():
             timeout=5
         )
 
-        resp.raise_for_status()
-        data = resp.json()
+        response.raise_for_status()
+        data = response.json()
         logger.info(f"v2raya: code={data.get('code')}, running={data.get('data', {}).get('running')}")
 
         if data.get("code") != "SUCCESS":
