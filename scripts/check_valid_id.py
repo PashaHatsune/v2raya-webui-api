@@ -3,8 +3,9 @@ import urllib
 import uuid
 
 import requests
-from config import config
 from loguru import logger
+
+from config import config
 from src.login import get_token
 from src.ping import ping_server
 
@@ -62,7 +63,6 @@ def get_all_servers(touch_data):
     servers = [srv for sub in subscriptions for srv in sub.get("servers", [])]
     logger.info(f"Всего серверов в подписках: {len(servers)}")
     return servers
-
 
 
 def check_server_valid(server_id, servers):

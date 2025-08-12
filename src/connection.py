@@ -1,8 +1,9 @@
 import uuid
 
 import requests
-from ..config import config
 from loguru import logger
+
+from ..config import config
 from .login import get_token
 
 
