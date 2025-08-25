@@ -3,9 +3,9 @@ import uuid
 import requests
 from loguru import logger
 
-from ..config import config
-from .login import get_token
-from .utils import json_data
+from config import config
+from src.login import get_token
+from src.utils import json_data
 
 
 def get_subscriptions() -> list[dict]:

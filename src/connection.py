@@ -3,8 +3,8 @@ import uuid
 import requests
 from loguru import logger
 
-from ..config import config
-from .login import get_token
+from config import config
+from src.login import get_token
 
 
 def connect_server(server_id, sub_index=0, outbound="proxy"):

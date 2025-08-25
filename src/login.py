@@ -1,7 +1,7 @@
 import requests
 from loguru import logger
 
-from ..config import config
+from config import config
 
 
 def get_token() -> str:
