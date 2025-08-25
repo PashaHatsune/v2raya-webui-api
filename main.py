@@ -2,10 +2,10 @@ import argparse
 
 from loguru import logger
 
-from .src.connection import connect_server, off_v2raya, on_v2raya
-from .src.get_subscriptions import get_subscriptions
-from .src.ping import ping_all_servers
-
+from src.connection import connect_server, off_v2raya, on_v2raya
+from src.get_subscriptions import get_subscriptions
+from src.ping import ping_all_servers
+from src.auto_connect import auto_connect
 
 def main():
     parser = argparse.ArgumentParser(description="V2ray automation CLI")
@@ -15,6 +15,7 @@ def main():
     subparsers.add_parser("off", help="Выключить V2ray")
     subparsers.add_parser("ping", help="Пинговать все сервера")
     subparsers.add_parser("list", help="Показать список серверов")
+    subparsers.add_parser("autoconnect", help="Автоматичкески выбрать самый лучший сервер и подключиться.")
 
     connect_parser = subparsers.add_parser("connect", help="Подключиться к серверу")
     connect_parser.add_argument("server_id", type=int, help="ID сервера")
@@ -45,6 +46,12 @@ def main():
     elif args.command == "connect":
         result = connect_server(args.server_id, sub_index=args.sub, outbound=args.outbound)
         logger.info(f"Результат подключения: {result}")
+ #   else:
+  #      parser.print_help()
+    
+    elif args.command == "autoconnect":
+        auto_connect()
     else:
         parser.print_help()
 
+main()
