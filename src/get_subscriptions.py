@@ -39,7 +39,7 @@ def get_subscriptions() -> list[dict]:
         for i, sub in enumerate(subscriptions):
             for srv in sub.get("servers", []):
                 net = str(srv.get("net", "")).lower()
-                if any(x in net for x in ["xhttp", "httpupgrade+tls", "httpupgrade"]):
+                if any(x in net for x in ["xhttp", "httpupgrade+tls", "httpupgrade", "splithttp"]):
                     continue
 
                 # Добавлять sub_index один раз достаточно
